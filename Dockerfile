@@ -16,7 +16,6 @@ FROM gcr.io/distroless/static-debian11 as runner
 COPY --from=builder /usr/src/app/target/x86_64-unknown-linux-musl/release/app /
 
 # set run env
-ENV ROCKET_ADDRESS=0.0.0.0
 EXPOSE 50051
 
 # run it

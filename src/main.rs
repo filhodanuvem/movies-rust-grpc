@@ -56,7 +56,7 @@ impl Movie for MovieService {
 
         let reply = grpc_movie::MovieResponse { movies: movies };
 
-        Ok(Response::new(reply)) // Send back our formatted greeting
+        Ok(Response::new(reply))
     }
 }
 
