@@ -8,7 +8,7 @@ COPY src /usr/src/app/src/
 COPY proto /usr/src/app/proto/
 WORKDIR /usr/src/app
 RUN rustup target add x86_64-unknown-linux-musl
-RUN cargo build --target x86_64-unknown-linux-musl --release
+RUN cargo build --target x86_64-unknown-linux-musl --release --bin app
 
 FROM gcr.io/distroless/static-debian11 as runner
 
