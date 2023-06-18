@@ -1,7 +1,5 @@
-use std::net::TcpListener;
 use std::env;
 use tonic::{transport::Server, Request, Response, Status};
-
 pub mod grpc_movie {
     tonic::include_proto!("movie");
 }
@@ -62,21 +60,24 @@ impl Movie for MovieService {
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let front_url = env::var("FRONTEND_URL").unwrap_or("localhost:3000".to_string());
     let port = env::var("PORT").unwrap_or("50051".to_string());
-    println!("FRONTEND_URL: {}", front_url);
     let addr = format!("127.0.0.1:{}", port).parse()?;
     let movie = MovieService::default();
     let movie = MovieServer::new(movie);
-    let movie = tonic_web::config().allow_all_origins().enable(movie);
-    let tcp_listener = TcpListener::bind("127.0.0.1:50052").unwrap();
+    let movie = tonic_web::enable(movie);
+    
+    let (mut health_reporter, health_service) = tonic_health::server::health_reporter();
+    health_reporter
+        .set_serving::<MovieServer<MovieService>>()
+        .await;
 
+    println!("Running on port {}...", port);
     Server::builder()
         .accept_http1(true)
+        .add_service(health_service)
         .add_service(movie)
         .serve(addr)
         .await?;
 
-    drop(tcp_listener);
     Ok(())
 }
