@@ -19,4 +19,4 @@ COPY --from=builder /usr/src/app/target/x86_64-unknown-linux-musl/release/movies
 EXPOSE 50051
 
 # run it
-CMD ["/app"]
+CMD ["/movies-back"]
