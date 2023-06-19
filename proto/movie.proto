@@ -7,7 +7,7 @@ message MovieItem {
   int32 year = 3;
   string genre = 4;
   string rating = 5;
-  string startRating = 6;
+  string starRating = 6;
   string runtime = 7;
   string cast = 8;
   string image = 9;
